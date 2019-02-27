@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour {
 
     private Transform target;
     private int wavepointIndex = 0;
-
+    public float jumpVelocity;
     
 
 
@@ -22,9 +22,9 @@ public class Enemy : MonoBehaviour {
     private void Update()
     {
         Vector3 dir = target.position - transform.position;
+ 
         transform.Translate(dir.normalized * speed * Time.deltaTime, Space.World ); // kad speedas butu vienodas, delta time skirtas tam, kad veiktu nors ir ant letai frame turimu kompiuteriu
-        
-
+        transform.Translate(Vector3.up * jumpVelocity * Time.deltaTime, Space.World);
 
         if (Vector3.Distance(transform.position, target.position) <= 0.4f)
         {
