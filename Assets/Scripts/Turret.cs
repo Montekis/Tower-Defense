@@ -5,10 +5,18 @@ using UnityEngine;
 public class Turret : MonoBehaviour {
 
     private Transform target;
+
+    [Header("Attributes")]
+    public float fireRate = 1f;
+    private float fireCountdown = 0f;
     public float range = 15f;
+
+    [Header("Unity Setup Fields")]
     public string enemyTag = "Enemy";
     public Transform partToRotate;
     public float turnSpeed = 10f;
+    public GameObject bulletPrefab;
+    public Transform firePoint;
 
     // Use this for initialization
     void Start () {
@@ -60,9 +68,25 @@ public class Turret : MonoBehaviour {
         light.color = Color.red;
         light.intensity = 2;
 
+        if(fireCountdown <= 0f)
+        {
+            Shoot();
+            fireCountdown = 1f / fireRate;
+        }
 
-
+        fireCountdown -= Time.deltaTime;
 	}
+
+    void Shoot()
+    {
+        GameObject  bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Bullet bullet = bulletGO.GetComponent<Bullet>();
+
+        if (bullet != null)
+        {
+            bullet.Seek(target);
+        }
+    }
 
     void OnDrawGizmosSelected()
     {
